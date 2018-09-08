@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= yield :title %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">AllRecipes</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <%if user_signed_in? %>
+                <li class="active"><li>  <%= link_to "Home", recipes_path %> </li>
+                <li>   <%= link_to "Sign Out", destroy_user_session_path, :method =>:delete %> </li>
+                <li>   <%= link_to "List of Ingredients", ingredients_path %></li>
+                <li>   <%= link_to "+Add a Recipe", new_recipe_path %></li>
+                <li>   <%= link_to "Your Comments", user_path(current_user.id) %></li>
+                <li>   <%= link_to "Most Commented", recipes_most_commented_recipe_path %></li>
+
+            <%end%>
+        </ul>
+        <div class="form-inline my-2 my-lg-0">
+          <%= form_tag(recipes_path, :method => 'get', id: "search-form") do %>
+          <%= text_field_tag :search, params[:search], placeholder: "Search by ingredient", class: "form-control mr-sm-2" %>
+          <%= submit_tag "Search", :name => nil, class: "btn btn-secondary my-2 my-sm-0" %>
+        <% end %>
+
+        <ul class="nav navbar-nav navbar-right">
+          <%if user_signed_in? %>
+          <%else%>
+            <li><a href="/users/sign_up"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><a href="/users/sign_in"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+          <%end%>
+        </ul>
+      </div>
+    </nav>
+
+    <p class="notice"><%= flash[:notice] %></p>
+    <p class="alert"><%= flash[:alert] %></p>
+
+    <%= yield %>
+
+  </body>
+</html>
